@@ -358,12 +358,25 @@
             downloadBarcodeBtn.disabled = true;
         }
 
+        // Generate timestamp for filename
+        function getTimestamp() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${year}${month}${day}-${hours}${minutes}${seconds}`;
+        }
+
         // Download QR Code
         downloadQRBtn.addEventListener('click', function() {
             const canvas = qrcodeDiv.querySelector('canvas');
             if (canvas) {
+                const timestamp = getTimestamp();
                 const link = document.createElement('a');
-                link.download = 'qrcode.png';
+                link.download = `ladlefall-qrcode-${timestamp}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
             }
@@ -373,6 +386,7 @@
         downloadBarcodeBtn.addEventListener('click', function() {
             const svg = document.getElementById('barcode');
             if (svg) {
+                const timestamp = getTimestamp();
                 const svgData = new XMLSerializer().serializeToString(svg);
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
@@ -386,7 +400,7 @@
                     ctx.drawImage(img, 0, 0);
                     
                     const link = document.createElement('a');
-                    link.download = 'barcode.png';
+                    link.download = `ladlefall-barcode-${timestamp}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                 };
