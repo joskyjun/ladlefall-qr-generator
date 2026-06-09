@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladle Fall - QR Code & Barcode Generator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥄</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .brand-name {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .ladle-emoji {
+            display: inline-block;
+            font-size: 2em;
+            animation: fall 2s ease-in-out infinite;
+        }
+
+        @keyframes fall {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(10px) rotate(15deg);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .output-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .code-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .code-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #qrcode {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #barcode-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        svg#barcode {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .placeholder {
+            color: #999;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .output-section {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 25px;
+            }
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #1976d2;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="brand">
+            <span class="ladle-emoji">🥄</span>
+            <div class="brand-name">LADLE FALL</div>
+        </div>
+        <h1>🎯 Code Generator</h1>
+        <p class="subtitle">Generate QR Codes and Barcodes instantly</p>
+        
+        <div class="info-box">
+            💡 <strong>Tip:</strong> Enter any text or number to generate both QR code and barcode. Barcodes work best with numeric values.
+        </div>
+
+        <div class="input-section">
+            <label for="textInput">Enter Text or Number:</label>
+            <input 
+                type="text" 
+                id="textInput" 
+                placeholder="Type something here..." 
+                autofocus
+            >
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <div class="output-section">
+            <div class="code-box">
+                <h2>📱 QR Code</h2>
+                <div id="qrcode">
+                    <div class="placeholder">QR code will appear here</div>
+                </div>
+                <button class="download-btn" id="downloadQR" disabled>Download QR Code</button>
+            </div>
+
+            <div class="code-box">
+                <h2>📊 Barcode</h2>
+                <div id="barcode-container">
+                    <svg id="barcode"></svg>
+                </div>
+                <button class="download-btn" id="downloadBarcode" disabled>Download Barcode</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made with 🥄 by <strong>Ladle Fall</strong></p>
+        </div>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('textInput');
+        const qrcodeDiv = document.getElementById('qrcode');
+        const barcodeContainer = document.getElementById('barcode-container');
+        const barcodeSvg = document.getElementById('barcode');
+        const downloadQRBtn = document.getElementById('downloadQR');
+        const downloadBarcodeBtn = document.getElementById('downloadBarcode');
+        const errorMessage = document.getElementById('errorMessage');
+
+        let qrcode = null;
+
+        // Generate codes on input
+        textInput.addEventListener('input', function() {
+            const text = this.value.trim();
+            errorMessage.style.display = 'none';
+
+            if (text === '') {
+                resetCodes();
+                return;
+            }
+
+            generateQRCode(text);
+            generateBarcode(text);
+        });
+
+        function generateQRCode(text) {
+            // Clear previous QR code
+            qrcodeDiv.innerHTML = '';
+            
+            try {
+                qrcode = new QRCode(qrcodeDiv, {
+                    text: text,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                downloadQRBtn.disabled = false;
+            } catch (error) {
+                qrcodeDiv.innerHTML = '<div class="placeholder">Error generating QR code</div>';
+                downloadQRBtn.disabled = true;
+            }
+        }
+
+        function generateBarcode(text) {
+            try {
+                // Clear previous content
+                barcodeContainer.innerHTML = '<svg id="barcode"></svg>';
+                const newBarcodeSvg = document.getElementById('barcode');
+                
+                // Try CODE128 first (supports alphanumeric)
+                JsBarcode(newBarcodeSvg, text, {
+                    format: "CODE128",
+                    width: 2,
+                    height: 100,
+                    displayValue: true,
+                    fontSize: 14,
+                    margin: 10
+                });
+                downloadBarcodeBtn.disabled = false;
+            } catch (error) {
+                // If CODE128 fails, show error
+                barcodeContainer.innerHTML = '<div class="placeholder">Invalid barcode format<br><small>Try numeric values or alphanumeric text</small></div>';
+                downloadBarcodeBtn.disabled = true;
+            }
+        }
+
+        function resetCodes() {
+            qrcodeDiv.innerHTML = '<div class="placeholder">QR code will appear here</div>';
+            barcodeContainer.innerHTML = '<svg id="barcode"></svg>';
+            downloadQRBtn.disabled = true;
+            downloadBarcodeBtn.disabled = true;
+        }
+
+        // Download QR Code
+        downloadQRBtn.addEventListener('click', function() {
+            const canvas = qrcodeDiv.querySelector('canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        });
+
+        // Download Barcode
+        downloadBarcodeBtn.addEventListener('click', function() {
+            const svg = document.getElementById('barcode');
+            if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const link = document.createElement('a');
+                    link.download = 'barcode.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                };
+                
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            }
+        });
+
+        // Demo text on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                textInput.value = 'Hello World 2026';
+                textInput.dispatchEvent(new Event('input'));
+            }, 500);
+        });
+    </script>
+</body>
+</html>
