@@ -270,7 +270,7 @@
             <div class="code-box">
                 <h2>📊 Barcode</h2>
                 <div id="barcode-container">
-                    <svg id="barcode"></svg>
+                    <div class="placeholder">Barcode will appear here</div>
                 </div>
                 <button class="download-btn" id="downloadBarcode" disabled>Download Barcode</button>
             </div>
@@ -329,8 +329,10 @@
         function generateBarcode(text) {
             try {
                 // Clear previous content
-                barcodeContainer.innerHTML = '<svg id="barcode"></svg>';
-                const newBarcodeSvg = document.getElementById('barcode');
+                barcodeContainer.innerHTML = '';
+                const newBarcodeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                newBarcodeSvg.id = 'barcode';
+                barcodeContainer.appendChild(newBarcodeSvg);
                 
                 // Try CODE128 first (supports alphanumeric)
                 JsBarcode(newBarcodeSvg, text, {
@@ -351,7 +353,7 @@
 
         function resetCodes() {
             qrcodeDiv.innerHTML = '<div class="placeholder">QR code will appear here</div>';
-            barcodeContainer.innerHTML = '<svg id="barcode"></svg>';
+            barcodeContainer.innerHTML = '<div class="placeholder">Barcode will appear here</div>';
             downloadQRBtn.disabled = true;
             downloadBarcodeBtn.disabled = true;
         }
@@ -393,13 +395,7 @@
             }
         });
 
-        // Demo text on page load
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                textInput.value = 'Hello World 2026';
-                textInput.dispatchEvent(new Event('input'));
-            }, 500);
-        });
+
     </script>
 </body>
 </html>
