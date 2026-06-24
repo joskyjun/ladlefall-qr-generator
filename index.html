@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ladle Fall - QR Code & Barcode Generator</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥄</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <style>
+        :root {
+            --bg: #f6f5f0;
+            --surface: #ffffff;
+            --surface-muted: #faf8f2;
+            --text: #171717;
+            --muted: #5f5f5f;
+            --border: #e6e1d5;
+            --accent: #b88a18;
+            --accent-dark: #8b6812;
+            --accent-soft: #fff7df;
+            --focus: rgba(184, 138, 24, 0.28);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,49 +31,48 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(184, 138, 24, 0.13), transparent 30%),
+                linear-gradient(180deg, #fbfaf7 0%, var(--bg) 100%);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 28px;
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 900px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(230, 225, 213, 0.9);
+            border-radius: 18px;
+            box-shadow: 0 24px 70px rgba(23, 23, 23, 0.12);
+            padding: 34px;
+            max-width: 960px;
             width: 100%;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
         .brand {
-            text-align: center;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            text-align: left;
+            margin-bottom: 24px;
         }
 
         .brand-name {
-            font-size: 1.8em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 1px;
+            color: var(--text);
+            font-size: 1.62em;
+            font-weight: 800;
+            letter-spacing: 0.14em;
         }
 
         .ladle-emoji {
             display: inline-block;
             font-size: 2em;
+            line-height: 1;
             animation: fall 2s ease-in-out infinite;
         }
 
@@ -74,16 +89,9 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
-            color: #999;
+            border-top: 1px solid var(--border);
+            color: #777;
             font-size: 0.9em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
         }
 
         .input-section {
@@ -93,23 +101,129 @@
         label {
             display: block;
             margin-bottom: 10px;
-            color: #555;
-            font-weight: 600;
-            font-size: 1.1em;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1.02em;
         }
 
-        input[type="text"] {
+        textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 14px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            font-family: inherit;
+            min-height: 56px;
+            resize: vertical;
+            color: var(--text);
+            background: var(--surface);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        input[type="text"]:focus {
+        textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--focus);
+        }
+
+        textarea::placeholder {
+            color: #8a8a8a;
+        }
+
+        button:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 20px 0 12px;
+        }
+
+        .section-header h2 {
+            color: var(--text);
+            font-size: 1.15em;
+        }
+
+        .section-note {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .suggestion-btn,
+        .history-btn {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .suggestion-btn:hover,
+        .history-btn:hover {
+            background: var(--accent-soft);
+            border-color: rgba(184, 138, 24, 0.46);
+            box-shadow: 0 8px 22px rgba(23, 23, 23, 0.08);
+        }
+
+        .suggestion-title,
+        .history-title {
+            display: block;
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-description,
+        .history-value {
+            display: block;
+            color: var(--muted);
+            font-size: 0.9em;
+            line-height: 1.35;
+        }
+
+        .history-section {
+            display: none;
+            margin-top: 4px;
+        }
+
+        .history-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .history-value {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .clear-history-btn {
+            background: transparent;
+            border: 0;
+            color: var(--accent-dark);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9em;
+            padding: 6px 0;
+        }
+
+        .clear-history-btn:hover {
+            color: var(--text);
         }
 
         .output-section {
@@ -120,31 +234,42 @@
         }
 
         .code-box {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
+            background: var(--surface-muted);
+            border-radius: 14px;
+            padding: 22px;
             text-align: center;
-            border: 2px solid #e0e0e0;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .code-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: rgba(184, 138, 24, 0.42);
+            box-shadow: 0 12px 32px rgba(23, 23, 23, 0.08);
         }
 
         .code-box h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--text);
+            margin-bottom: 18px;
+            font-size: 1.15em;
+            font-weight: 800;
+        }
+
+        .title-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-dark);
         }
 
         #qrcode {
             display: inline-block;
-            margin: 20px 0;
+            margin: 14px 0;
             padding: 15px;
             background: white;
-            border-radius: 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             min-height: 150px;
             display: flex;
             align-items: center;
@@ -152,10 +277,11 @@
         }
 
         #barcode-container {
-            margin: 20px 0;
+            margin: 14px 0;
             padding: 15px;
             background: white;
-            border-radius: 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             min-height: 150px;
             display: flex;
             align-items: center;
@@ -168,21 +294,21 @@
         }
 
         .download-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--text);
+            color: #fff;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 11px 18px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 15px;
+            font-weight: 700;
+            transition: background-color 0.2s, box-shadow 0.2s;
             margin-top: 15px;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: var(--accent-dark);
+            box-shadow: 0 8px 20px rgba(139, 104, 18, 0.22);
         }
 
         .download-btn:active {
@@ -190,13 +316,14 @@
         }
 
         .download-btn:disabled {
-            background: #ccc;
+            background: #d2d2d2;
+            color: #777;
             cursor: not-allowed;
-            transform: none;
+            box-shadow: none;
         }
 
         .placeholder {
-            color: #999;
+            color: #777;
             font-style: italic;
             padding: 40px 20px;
         }
@@ -206,17 +333,27 @@
                 grid-template-columns: 1fr;
             }
 
-            h1 {
-                font-size: 2em;
-            }
-
             .container {
                 padding: 25px;
+            }
+
+            .brand {
+                margin-bottom: 18px;
+            }
+
+            .brand-name {
+                font-size: 1.45em;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 6px;
             }
         }
 
         .error-message {
-            color: #e74c3c;
+            color: #b42318;
             text-align: center;
             margin-top: 10px;
             font-size: 0.9em;
@@ -224,43 +361,56 @@
         }
 
         .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
+            background: var(--accent-soft);
+            border: 1px solid rgba(184, 138, 24, 0.25);
+            border-left: 4px solid var(--accent);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             margin-bottom: 20px;
-            color: #1976d2;
+            color: #5f470c;
             font-size: 0.95em;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="brand">
-            <span class="ladle-emoji">🥄</span>
+            <span class="ladle-emoji" aria-hidden="true">🥄</span>
             <div class="brand-name">LADLE FALL</div>
         </div>
-        <h1>🎯 Code Generator</h1>
-        <p class="subtitle">Generate QR Codes and Barcodes instantly</p>
         
-        <div class="info-box">
-            💡 <strong>Tip:</strong> Enter any text or number to generate both QR code and barcode. Barcodes work best with numeric values.
-        </div>
-
         <div class="input-section">
-            <label for="textInput">Enter Text or Number:</label>
-            <input 
-                type="text" 
+            <label for="textInput">What would you like to encode?</label>
+            <textarea
                 id="textInput" 
                 placeholder="Type something here..." 
                 autofocus
-            >
+            ></textarea>
             <div class="error-message" id="errorMessage"></div>
         </div>
 
         <div class="output-section">
             <div class="code-box">
-                <h2>📱 QR Code</h2>
+                <h2>
+                    <svg class="title-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 4h6v6H4V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M14 4h6v6h-6V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M4 14h6v6H4v-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M14 14h2v2h-2v-2ZM18 14h2v6h-2v-6ZM14 18h2v2h-2v-2Z" fill="currentColor"/>
+                    </svg>
+                    QR Code
+                </h2>
                 <div id="qrcode">
                     <div class="placeholder">QR code will appear here</div>
                 </div>
@@ -268,7 +418,13 @@
             </div>
 
             <div class="code-box">
-                <h2>📊 Barcode</h2>
+                <h2>
+                    <svg class="title-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 5v14M7 5v14M11 5v14M14 5v14M20 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 5v14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                    Barcode
+                </h2>
                 <div id="barcode-container">
                     <div class="placeholder">Barcode will appear here</div>
                 </div>
@@ -276,25 +432,112 @@
             </div>
         </div>
 
+        <div class="suggestions-section">
+            <div class="section-header">
+                <h2>Format Suggestions</h2>
+                <span class="section-note">Click one to fill the generator field.</span>
+            </div>
+            <div class="info-box">
+                <strong>Tip:</strong> Pick a format suggestion or enter your own text. QR codes support structured formats; barcodes work best with short numeric or alphanumeric values.
+            </div>
+            <div class="suggestion-grid" id="suggestionGrid"></div>
+        </div>
+
+        <div class="history-section" id="historySection">
+            <div class="section-header">
+                <h2>Recent Codes</h2>
+                <button class="clear-history-btn" id="clearHistory" type="button">Clear history</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+
         <div class="footer">
-            <p>Made with 🥄 by <strong>Ladle Fall</strong></p>
+            <p>Made by <strong>Ladle Fall</strong></p>
         </div>
     </div>
 
     <script>
         const textInput = document.getElementById('textInput');
+        const suggestionGrid = document.getElementById('suggestionGrid');
+        const historySection = document.getElementById('historySection');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistory');
         const qrcodeDiv = document.getElementById('qrcode');
         const barcodeContainer = document.getElementById('barcode-container');
-        const barcodeSvg = document.getElementById('barcode');
         const downloadQRBtn = document.getElementById('downloadQR');
         const downloadBarcodeBtn = document.getElementById('downloadBarcode');
         const errorMessage = document.getElementById('errorMessage');
 
-        let qrcode = null;
+        const HISTORY_KEY = 'ladlefall-code-history';
+        const HISTORY_LIMIT = 8;
+        const suggestions = [
+            {
+                title: 'Phone',
+                description: 'Tap to call a phone number.',
+                placeholder: 'tel:+15551234567',
+                value: 'tel:+15551234567'
+            },
+            {
+                title: 'Email',
+                description: 'Open a prefilled email draft.',
+                placeholder: 'mailto:name@example.com?subject=Hello&body=Your%20message',
+                value: 'mailto:name@example.com?subject=Hello&body=Your%20message'
+            },
+            {
+                title: 'vCard / Contact',
+                description: 'Save a contact to an address book.',
+                placeholder: 'BEGIN:VCARD\nVERSION:3.0\nN:Doe;Jane;;;\nFN:Jane Doe\nTEL:+15551234567\nEMAIL:jane@example.com\nORG:Example Company\nEND:VCARD',
+                value: 'BEGIN:VCARD\nVERSION:3.0\nN:Doe;Jane;;;\nFN:Jane Doe\nTEL:+15551234567\nEMAIL:jane@example.com\nORG:Example Company\nEND:VCARD'
+            },
+            {
+                title: 'Wi-Fi',
+                description: 'Join a Wi-Fi network.',
+                placeholder: 'WIFI:T:WPA;S:NetworkName;P:NetworkPassword;;',
+                value: 'WIFI:T:WPA;S:NetworkName;P:NetworkPassword;;'
+            },
+            {
+                title: 'Payment / Finance',
+                description: 'Payment URL, wallet, or account note.',
+                placeholder: 'upi://pay?pa=name@bank&pn=Full%20Name&am=10.00&cu=USD',
+                value: 'upi://pay?pa=name@bank&pn=Full%20Name&am=10.00&cu=USD'
+            },
+            {
+                title: 'Social / Messenger',
+                description: 'Link to a profile, chat, or channel.',
+                placeholder: 'https://wa.me/15551234567?text=Hello',
+                value: 'https://wa.me/15551234567?text=Hello'
+            },
+            {
+                title: 'Text / Coupon',
+                description: 'Plain text, promo code, or note.',
+                placeholder: 'COUPON: SAVE20\nValid until: 2026-12-31',
+                value: 'COUPON: SAVE20\nValid until: 2026-12-31'
+            },
+            {
+                title: 'Barcode Product Code',
+                description: 'Short value that also works well as barcode.',
+                placeholder: '123456789012',
+                value: '123456789012'
+            }
+        ];
 
-        // Generate codes on input
+        let qrcode = null;
+        let historySaveTimer = null;
+
+        renderSuggestions();
+        renderHistory();
+
         textInput.addEventListener('input', function() {
-            const text = this.value.trim();
+            handleInput(this.value, true);
+        });
+
+        clearHistoryBtn.addEventListener('click', function() {
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistory();
+        });
+
+        function handleInput(value, shouldSaveHistory) {
+            const text = value.trim();
             errorMessage.style.display = 'none';
 
             if (text === '') {
@@ -304,7 +547,99 @@
 
             generateQRCode(text);
             generateBarcode(text);
-        });
+
+            if (shouldSaveHistory) {
+                scheduleHistorySave(text);
+            }
+        }
+
+        function renderSuggestions() {
+            suggestionGrid.innerHTML = '';
+
+            suggestions.forEach((suggestion) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'suggestion-btn';
+                button.innerHTML = `
+                    <span class="suggestion-title">${escapeHtml(suggestion.title)}</span>
+                    <span class="suggestion-description">${escapeHtml(suggestion.description)}</span>
+                `;
+                button.addEventListener('click', function() {
+                    fillGenerator(suggestion.value, suggestion.placeholder);
+                });
+                suggestionGrid.appendChild(button);
+            });
+        }
+
+        function fillGenerator(value, placeholder) {
+            textInput.placeholder = placeholder || 'Type something here...';
+            textInput.value = value;
+            textInput.focus();
+            textInput.select();
+            handleInput(value, true);
+        }
+
+        function scheduleHistorySave(text) {
+            clearTimeout(historySaveTimer);
+            historySaveTimer = setTimeout(function() {
+                saveHistory(text);
+                renderHistory();
+            }, 500);
+        }
+
+        function getHistory() {
+            try {
+                const savedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+                return Array.isArray(savedHistory) ? savedHistory : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveHistory(text) {
+            const cleanText = text.trim();
+            if (!cleanText) {
+                return;
+            }
+
+            const history = getHistory().filter((item) => item.value !== cleanText);
+            const matchedSuggestion = suggestions.find((suggestion) => suggestion.value === cleanText);
+            history.unshift({
+                title: matchedSuggestion ? matchedSuggestion.title : 'Custom Code',
+                value: cleanText,
+                savedAt: new Date().toISOString()
+            });
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, HISTORY_LIMIT)));
+        }
+
+        function renderHistory() {
+            const history = getHistory();
+            historySection.style.display = history.length ? 'block' : 'none';
+            historyList.innerHTML = '';
+
+            history.forEach((item) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'history-btn';
+                button.innerHTML = `
+                    <span class="history-title">${escapeHtml(item.title || 'Saved Code')}</span>
+                    <span class="history-value">${escapeHtml(item.value || '')}</span>
+                `;
+                button.addEventListener('click', function() {
+                    fillGenerator(item.value || '', item.value || 'Type something here...');
+                });
+                historyList.appendChild(button);
+            });
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
 
         function generateQRCode(text) {
             // Clear previous QR code
